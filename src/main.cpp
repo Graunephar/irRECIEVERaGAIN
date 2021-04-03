@@ -2,6 +2,10 @@
 #include <IRremote.h>
 int IR_RECEIVE_PIN = 11; // Receive on pin 11
 
+int index = 0;
+decode_results results;
+
+
 void setup()
 {
   Serial.begin(9600);
@@ -10,9 +14,23 @@ void setup()
 }
 
 void loop() {
+
+  
   if (IrReceiver.decode()) {
-    //IrReceiver.printIRResultShort(&Serial);
-    Serial.println(IrReceiver.decodedIRData.command);
+
+    uint16_t kommando = IrReceiver.decodedIRData.command;
+    decode_type_t protokol = IrReceiver.decodedIRData.protocol;
+    
+    if(kommando == 0x1D && protokol == RC5) {
+      Serial.println(index);
+      index++;
+    } else {
+    }
+    
+  //Show debug info in terminal
+  //IrReceiver.printIRResultShort(&Serial);
+
+
     IrReceiver.resume(); // Continue receiving
   }
 }
